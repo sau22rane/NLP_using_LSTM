@@ -1,0 +1,116 @@
+#include<stdio.h>
+#include<iostream>
+using namespace std;
+struct Node{
+	int value;
+	struct Node *next;
+};
+
+class LinkedList
+{
+	struct Node *head;
+public:
+	LinkedList(int *m){
+		int len,i;
+		len = *(m+0); 
+		struct Node *initial,*temp;
+		head=(struct Node*)malloc(sizeof(struct Node));
+		head->value=*(m+1);
+		head->next=NULL;
+		initial=head;
+		for(i=2;i<=len;i++){
+			temp=(struct Node*)malloc(sizeof(struct Node));
+			temp->value=*(m+i);
+			initial->next=temp;
+			initial=temp;
+		}
+		temp->next=NULL;
+	}
+	LinkedList(){
+
+	};
+	void Display(){
+		struct Node *temp;
+		temp=head;
+		printf("The Linked List is as follows:\n%d",temp->value);		
+		do{
+			temp=temp->next;
+			printf(" -> %d",temp->value);
+		}
+		while(temp->next!=NULL);
+		cout<<endl;
+	}
+	void operator +=(LinkedList &n){
+		struct Node *temp;
+		temp=head;
+		while(1){
+			if(temp->next==NULL)
+				break;
+			temp=temp->next;
+		}
+		temp->next=n.head;
+		Display();
+	}
+	void operator +=(int n){
+		struct Node *temp,*additional;
+		temp=head;
+		while(1){
+			if(temp->next==NULL)
+				break;
+			temp=temp->next;
+		}
+		additional=(struct Node*)malloc(sizeof(struct Node));
+		additional->value=n;
+		additional->next=NULL;
+		temp->next=additional;
+		Display();
+	}
+	void operator *=(int n){
+		struct Node *temp;
+		temp=head;
+		while(1){
+			temp->value=temp->value*n;
+			if(temp->next==NULL)
+				break;
+			temp=temp->next;
+		}
+		Display();
+	}
+};
+
+int main(){
+	int n,m,i;
+	printf("Enter the number of elements present in the first LinkedList: ");
+	scanf("%d",&n);
+	int *first = (int*)malloc(n*sizeof(int));
+	printf("Enter the elements:\n");
+	for(i=1;i<=n;i++){
+		scanf("%d",first+i);
+	}
+	printf("\nEnter the number of elements present in the second LinkedList: ");
+	scanf("%d",&m);
+	int *second = (int*)malloc(m*sizeof(int));
+	printf("Enter the elements:\n");
+	for(i=1;i<=m;i++){
+		scanf("%d",second+i);
+	}
+	*(first+0)=n;
+	*(second+0)=m;
+
+	LinkedList F(first),S(second);
+	printf("\n\nFIRST\n");
+	F.Display();
+	printf("\nSECOND\n");
+	S.Display();
+
+
+	printf("\nFirst += Second\n");
+	F+=S;
+	printf("\nAdding a single digit(3) to the new Linked List\n");
+	F+=3;
+	printf("\nMultiplying all the elements of the new Linked List by a digit(6)\n");
+	F*=6;
+	
+	
+	return 0;
+}
